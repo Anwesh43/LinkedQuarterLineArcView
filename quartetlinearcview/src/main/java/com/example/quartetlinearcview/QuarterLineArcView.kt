@@ -31,3 +31,28 @@ fun Int.inverse() : Float = 1f/ this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
+
+fun Canvas.drawQuarterLineArc(scale : Float, w : Float, h : Float, paint : Paint) {
+    val size : Float = Math.min(w, h) / sizeFactor
+    val r : Float = Math.min(w, h) / rFactor
+    val sf : Float = scale.sinify()
+    save()
+    translate(w / 2, h / 2)
+    for (j in 0..3) {
+        save()
+        rotate(90f * j * sf.divideScale(j, parts))
+        drawLine(0f, 0f, size * sf.divideScale(0, parts), 0f, paint)
+        drawArc(RectF(-size, -size, size, size), -rot, rot * sf.divideScale(parts -1 , parts), true, paint)
+        restore()
+    }
+    restore()
+}
+
+fun Canvas.drawQLANode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    paint.color = colors[i]
+    paint.strokeCap = Paint.Cap.ROUND
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    drawQuarterLineArc(scale, w, h, paint)
+}
