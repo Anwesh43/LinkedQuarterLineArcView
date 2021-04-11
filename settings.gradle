@@ -1,0 +1,3 @@
+include ':quartetlinearcview'
+include ':app'
+rootProject.name = "LinkedQuarterLineArcView"
