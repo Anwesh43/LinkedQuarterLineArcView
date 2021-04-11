@@ -183,4 +183,27 @@ class QuarterLineArcView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : QuarterLineArcView) {
+
+        private val animator : Animator = Animator(view)
+        private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        private val qla : QuarterLineArc = QuarterLineArc(0)
+
+        fun render(canvas : Canvas) {
+            canvas.drawColor(backColor)
+            qla.draw(canvas, paint)
+            animator.animate {
+                qla.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            qla.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
